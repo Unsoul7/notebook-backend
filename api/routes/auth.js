@@ -38,6 +38,21 @@ router.post('/login', async (req, res) => {
     return res.status(200)
 })
 
+router.post('/forgetpass',async (req,res) => {
+
+    const {email, password, newpassword} = req.body
+    const finduser = await User.findOne({email})
+    const checkpass = await bcryptjs.compare(password, finduser.password)
+    
+    if(!checkpass){
+        return res.status(401).send('wrong pass')
+    }
+    const salt = await bcryptjs.genSalt(10)
+    finduser.password = await bcryptjs.hash(newpassword,salt)
+    await finduser.save()
+    return res.send(finduser)
+})
+
 
 
 module.exports = router

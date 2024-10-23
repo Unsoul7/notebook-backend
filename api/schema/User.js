@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const DBURI = 'mongodb://localhost:27017/notefreak'
+const DBURI = 'mongodb+srv://amanforsure:aman9811@cluster0.kfhzv.mongodb.net/test'
 mongoose.connect(DBURI)
 
 const userSchema = new mongoose.Schema({
@@ -12,7 +12,10 @@ const userSchema = new mongoose.Schema({
     },
     password : {
         type : String,
-    }
+    },
+    notes : [{
+        type : mongoose.Schema.Types.ObjectId
+    }]
 })
 
 module.exports = mongoose.model('User',userSchema)
