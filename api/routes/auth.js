@@ -2,6 +2,15 @@ const express = require('express')
 const router = express.Router()
 const bcryptjs = require('bcryptjs')
 const User = require('../schema/User')
+const jwt = require('jsonwebtoken')
+const secret = 'aman9811'
+
+const setUser = (user) => {
+    return jwt.sign({
+        id : user._id,
+        email : user.email
+    },secret)
+}
 
 router.post('/register', async (req, res) => {
     const { fullname, email, password } = req.body
@@ -34,12 +43,11 @@ router.post('/login', async (req, res) => {
     if(!checkpass){
         return res.status(401)
     }
-
-    return res.status(200)
+    const token = setUser(findUser)
+    return res.status(200).cookie(token)
 })
 
 router.post('/forgetpass',async (req,res) => {
-
     const {email, password, newpassword} = req.body
     const finduser = await User.findOne({email})
     const checkpass = await bcryptjs.compare(password, finduser.password)
