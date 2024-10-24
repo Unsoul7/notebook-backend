@@ -68,4 +68,16 @@ router.post('/getnote',async (req,res) => {
 
 })
 
+router.post('/allnote',async (req,res) => {
+    const {email} = req.body
+
+    try{
+        const getusernotes = await User.findOne({email}).populate('notes')   
+        res.status(200).json(getusernotes.notes)
+    }
+    catch(err){
+        res.status(404).send('something went wrong')
+    }
+ })
+
 module.exports = router
